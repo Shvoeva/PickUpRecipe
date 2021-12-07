@@ -5,176 +5,185 @@ using PickUpRecipe.Core.RecipeSite;
 using Xamarin.Forms;
 using PickUpRecipe.Core.SiteWithDish;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace PickUpRecipe
 {
-    public partial class MainPage : ContentPage
-    {
-        private ParserWorker<string[]> parser;
-        private ParserWorker<string[]> recipeParser;
-        private ParserWorker<string[]> ingredientsParser;
+	/// <summary>
+	/// Главное окно.
+	/// </summary>
+	public partial class MainPage : ContentPage
+	{
+		/// <summary>
+		/// Парсер сайта.
+		/// </summary>
+		private readonly ParserWorker<string[]> _parser;
 
-        private StackLayout stackLayout = new StackLayout();
-        private FlexLayout[] flexLayout;
-        private CheckBox[] boxes;
-        private Label[] labels;
+		/// <summary>
+		/// Парсер рецепта.
+		/// </summary>
+		private readonly ParserWorker<string[]> _recipeParser;
 
-        int page;
-        private int count;
+		/// <summary>
+		/// Парсер ингредиентов.
+		/// </summary>
+		private readonly ParserWorker<string[]> _ingredientsParser;
 
-        public MainPage()
-        {
-            InitializeComponent();
-            parser = new ParserWorker<string[]>(new RecipeSiteParser());
-            recipeParser = new ParserWorker<string[]>(new SiteWithDishParser());
-            ingredientsParser = new ParserWorker<string[]>(new IngredientsParser());
+		/// <summary>
+		/// Страница
+		/// </summary>
+		private int _page;
 
-            parser.OnNewData += Parser_OnNewData;
-            recipeParser.OnNewData += RecipeParser_OnNewData;
-            ingredientsParser.OnNewData += IngredientsParser_OnNewData;
-        }
+		/// <summary>
+		/// Конструктор.
+		/// </summary>
+		public MainPage()
+		{
+			InitializeComponent();
+			_parser = new ParserWorker<string[]>(new RecipeSiteParser());
+			_recipeParser = new ParserWorker<string[]>(new SiteWithDishParser());
+			_ingredientsParser = new ParserWorker<string[]>(new IngredientsParser());
 
-        private void Parser_OnNewData(object arg1, string[] arg2)
-        {
-            int rec = new Random(DateTime.Now.Second).Next(0, 15);
+			_parser.OnNewData += Parser_OnNewData;
+			_recipeParser.OnNewData += RecipeParser_OnNewData;
+			_ingredientsParser.OnNewData += IngredientsParser_OnNewData;
+		}
 
-            linkEntry.Text = arg2[rec];
+		private async void Parser_OnNewData(object arg1, string[] arg2)
+		{
+			var rec = new Random(DateTime.Now.Second).Next(0, arg2.Length - 1);
+			linkEntry.Text = arg2[rec];
+			_recipeParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
+			await _recipeParser.Start();
+			_ingredientsParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
+			await _ingredientsParser.Start();
+		}
 
-            recipeParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
-            recipeParser.Start();
+		private void RecipeParser_OnNewData(object arg1, string[] arg2)
+		{
+			nameRecipeLabel.Text = arg2[0];
+			recipeImage.Source = arg2[1];
+		}
 
-            ingredientsParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
-            ingredientsParser.Start();
-        }
+		private void IngredientsParser_OnNewData(object arg1, string[] arg2)
+		{
+			ingredients.Children.Clear();
+			foreach (var ingredient in arg2)
+			{
+				var flexLayout = new FlexLayout();
+				var boxes = new CheckBox
+				{
+					Color = Color.DarkRed
+				};
+				var labels = new Label
+				{
+					FontSize = 18,
+					VerticalTextAlignment = TextAlignment.Center,
+					Text = ingredient
+				};
 
-        private void RecipeParser_OnNewData(object arg1, string[] arg2)
-        {
-            nameRecipeLabel.Text = arg2[0];
-            recipeImage.Source = arg2[1];
-        }
+				flexLayout.Children.Add(boxes);
+				flexLayout.Children.Add(labels);
+				ingredients.Children.Add(flexLayout);
+			}
+		}
 
-        private void IngredientsParser_OnNewData(object arg1, string[] arg2)
-        {
-            count = arg2.Length;
-            stackLayout.Children.Clear();
-            ingredients.Children.Clear();
+		private async void MainDishButton_Click(object sender, EventArgs e)
+		{
+			_page = new Random(DateTime.Now.Second).Next(1, 15);
+			var str = $"https://www.carolinescooking.com/main/page/{_page}/";
+			_parser.ParserSettings = new RecipeSiteSettings(str);
+			await _parser.Start();
 
-            flexLayout = new FlexLayout[count];
-            boxes = new CheckBox[count];
-            labels = new Label[count];
+			Show();
+		}
 
-            for(int i = 0; i < count; i++)
-            {
-                flexLayout[i] = new FlexLayout();
+		private async void SideDishButton_Click(object sender, EventArgs e)
+		{
+			_page = new Random(DateTime.Now.Second).Next(1, 7);
+			var str = $"https://www.carolinescooking.com/side/page/{_page}/";
+			_parser.ParserSettings = new RecipeSiteSettings(str);
+			await _parser.Start();
 
-                boxes[i] = new CheckBox();
-                boxes[i].Color = Color.DarkRed;
+			Show();
+		}
 
-                labels[i] = new Label();
-                labels[i].FontSize = 18;
-                labels[i].VerticalTextAlignment = TextAlignment.Center;
-                labels[i].Text = arg2[i];
+		private async void DessertButton_Click(object sender, EventArgs e)
+		{
+			_page = new Random(DateTime.Now.Second).Next(1, 5);
+			var str = $"https://www.carolinescooking.com/dessert/page/{_page}/";
+			_parser.ParserSettings = new RecipeSiteSettings(str);
+			await _parser.Start();
 
-                flexLayout[i].Children.Add(boxes[i]);
-                flexLayout[i].Children.Add(labels[i]);
-                stackLayout.Children.Add(flexLayout[i]);
-            }
+			Show();
+		}
 
-            ingredients.Children.Add(stackLayout);
-        }
+		private async void SnackButton_Click(object sender, EventArgs e)
+		{ 
+			_page = new Random(DateTime.Now.Second).Next(1, 9);
+			var str = $"https://www.carolinescooking.com/snack/page/{_page}/";
+			_parser.ParserSettings = new RecipeSiteSettings(str);
+			await _parser.Start();
 
-        private void MainDishButton_Click(object sender, EventArgs e)
-        {
-            page = new Random(DateTime.Now.Second).Next(1, 15);
-            string str = $"https://www.carolinescooking.com/main/page/{page}/";
-            parser.ParserSettings = new RecipeSiteSettings(str);
-            parser.Start();
+			Show();
+		}
 
-            Show();
-        }
+		private async void DrinkButton_Click(object sender, EventArgs e)
+		{
+			_page = new Random(DateTime.Now.Second).Next(1, 4);
+			var str = $"https://www.carolinescooking.com/drink/page/{_page}/";
+			_parser.ParserSettings = new RecipeSiteSettings(str);
+			await _parser.Start();
 
-        private void SideDishButton_Click(object sender, EventArgs e)
-        {
-            page = new Random(DateTime.Now.Second).Next(1, 7);
-            string str = $"https://www.carolinescooking.com/side/page/{page}/";
-            parser.ParserSettings = new RecipeSiteSettings(str);
-            parser.Start();
+			Show();
+		}
 
-            Show();
-        }
+		private async void HolidayRecipeButton_Click(object sender, EventArgs e)
+		{
+			_page = new Random(DateTime.Now.Second).Next(1, 6);
+			var str = $"https://www.carolinescooking.com/seasonal-recipes/holiday-ideas/page/{_page}/";
+			_parser.ParserSettings = new RecipeSiteSettings(str);
+			await _parser.Start();
 
-        private void DessertButton_Click(object sender, EventArgs e)
-        {
-            page = new Random(DateTime.Now.Second).Next(1, 5);
-            string str = $"https://www.carolinescooking.com/dessert/page/{page}/";
-            parser.ParserSettings = new RecipeSiteSettings(str);
-            parser.Start();
+			Show();
+		}
 
-            Show();
-        }
+		private async void RecordingButton_Click(object sender, EventArgs e)
+		{
+			var text = nameRecipeLabel.Text + "\n";
 
-        private void SnackButton_Click(object sender, EventArgs e)
-        { 
-            page = new Random(DateTime.Now.Second).Next(1, 9);
-            string str = $"https://www.carolinescooking.com/snack/page/{page}/";
-            parser.ParserSettings = new RecipeSiteSettings(str);
-            parser.Start();
+			if (linkCheckBox.IsChecked)
+			{
+				text += linkEntry.Text + "\n";
+			}
 
-            Show();
-        }
+			text = (from ingredientsChild in ingredients.Children
+				select ingredientsChild as FlexLayout
+				into flexLayout
+				let checkBox = flexLayout.Children.Select(item => item as CheckBox).First()
+				let label = flexLayout.Children.Select(item => item as Label).First()
+				where checkBox.IsChecked
+				select label).Aggregate(text, (current, label) => current + ("\n" + label.Text));
 
-        private void DrinkButton_Click(object sender, EventArgs e)
-        {
-            page = new Random(DateTime.Now.Second).Next(1, 4);
-            string str = $"https://www.carolinescooking.com/drink/page/{page}/";
-            parser.ParserSettings = new RecipeSiteSettings(str);
-            parser.Start();
-
-            Show();
-        }
-
-        private void HolidayRecipeButton_Click(object sender, EventArgs e)
-        {
-            page = new Random(DateTime.Now.Second).Next(1, 6);
-            string str = $"https://www.carolinescooking.com/seasonal-recipes/holiday-ideas/page/{page}/";
-            parser.ParserSettings = new RecipeSiteSettings(str);
-            parser.Start();
-
-            Show();
-        }
-
-        private async void RecordingButton_Click(object sender, EventArgs e)
-        {
-            string text = nameRecipeLabel.Text + "\n";
-
-            if (linkCheckBox.IsChecked)
-            {
-                text += linkEntry.Text + "\n";
-            }
-
-            for (int i = 0; i < count; i++)
-            {
-                if (boxes[i].IsChecked)
-                {
-                    text += "\n" + labels[i].Text;
-                }
-            }
-
-            Clipboard.SetTextAsync(text);
-            string text2 = Clipboard.GetTextAsync().ToString();
-            await DisplayAlert("Data saved", "Data saved to clipboard", "OK");
+			await Clipboard.SetTextAsync(text);
+			var text2 = Clipboard.GetTextAsync().ToString();
+			await DisplayAlert("Data saved", "Data saved to clipboard", "OK");
  
-        }
+		}
 
-        private void Show()
-        {
-            linkEntry.IsVisible = true;
-            nameRecipeLabel.IsVisible = true;
-            recipeImage.IsVisible = true;
-            linkStackLayout.IsVisible = true;
-            recordingButton.IsVisible = true;
-        }
-    }
+		/// <summary>
+		/// Показать элементы.
+		/// </summary>
+		private void Show()
+		{
+			linkEntry.IsVisible = true;
+			nameRecipeLabel.IsVisible = true;
+			recipeImage.IsVisible = true;
+			linkStackLayout.IsVisible = true;
+			recordingButton.IsVisible = true;
+		}
+	}
 }
