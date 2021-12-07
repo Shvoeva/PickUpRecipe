@@ -21,6 +21,8 @@ namespace PickUpRecipe.Core.Parsers
 		/// </summary>
 		private const string ImageClassName = "wp-block-image";
 
+		private const string ImgName = "lazyloaded";
+
 		/// <inheritdoc/>
 		public string[] Parse(IHtmlDocument document)
 		{
@@ -31,16 +33,21 @@ namespace PickUpRecipe.Core.Parsers
 				.ToArray();
 			list.Add(item1[0].TextContent);
 
-			var item2 = document.GetElementsByClassName(ImageClassName).First();
-			var regex = new Regex(Regex.Escape("data-src=\"") + "(.*?)" + Regex.Escape("\""));
-			var matches = regex.Matches(item2.InnerHtml);
-			var line = matches[0].Groups[1].Value;
-			if (matches[0].Groups[1].Value == IgnoreImageUrl)
+			var item2 = document.QuerySelectorAll("img");
+			var src = string.Empty;
+			var classImg = "wp-image-";
+			foreach (var img in item2)
 			{
-				line = matches[1].Groups[1].Value;
+				if (img.ClassName != null && img.ClassName.Contains(classImg))
+				{
+					Regex r = new Regex(Regex.Escape("data-src=\"") + "(.*?)" + Regex.Escape("\""));
+					MatchCollection matches = r.Matches(img.OuterHtml);
+					src = matches[0].Groups[1].Value;
+					break;
+				}
 			}
 
-			list.Add(line);
+			list.Add(src);
 			return list.ToArray();
 		}
 	}
