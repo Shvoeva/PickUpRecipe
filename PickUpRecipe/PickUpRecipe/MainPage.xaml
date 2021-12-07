@@ -27,24 +27,24 @@
 						TextTransform="Uppercase"/>
 				</Frame>
 			</StackLayout>
-			<StackLayout Margin="25 25 25 25">
+			<StackLayout Margin="25, 25, 25, 25">
 				<StackLayout HorizontalOptions="Center" Orientation="Horizontal">
 					<ImageButton
-						x:Name="mainDishButton"
+						x:Name="MainDishButton"
 						Padding="15"
 						BackgroundColor="#8B0000"
 						Clicked="MainDishButton_Click"
 						HeightRequest="115"
 						Source="MainDish.png"/>
 					<ImageButton
-						x:Name="sideDishButton"
+						x:Name="SideDishButton"
 						Padding="10"
 						BackgroundColor="#8B0000"
 						Clicked="SideDishButton_Click"
 						HeightRequest="115"
 						Source="SideDish.png"/>
 					<ImageButton
-						x:Name="dessertButton"
+						x:Name="DessertButton"
 						Padding="15"
 						BackgroundColor="#8B0000"
 						Clicked="DessertButton_Click"
@@ -52,25 +52,25 @@
 						Source="Dessert.png"/>
 				</StackLayout>
 				<StackLayout
-					Margin="0 0 0 25"
+					Margin="0, 0, 0, 25"
 					HorizontalOptions="Center"
 					Orientation="Horizontal">
 					<ImageButton
-						x:Name="snackButton"
+						x:Name="SnackButton"
 						Padding="10"
 						BackgroundColor="#8B0000"
 						Clicked="SnackButton_Click"
 						HeightRequest="115"
 						Source="Snack.png"/>
 					<ImageButton
-						x:Name="drinkButton"
+						x:Name="DrinkButton"
 						Padding="15"
 						BackgroundColor="#8B0000"
 						Clicked="DrinkButton_Click"
 						HeightRequest="115"
 						Source="Drink.png"/>
 					<ImageButton
-						x:Name="holidayRecipeButton"
+						x:Name="HolidayRecipeButton"
 						Padding="10"
 						BackgroundColor="#8B0000"
 						Clicked="HolidayRecipeButton_Click"
@@ -78,13 +78,13 @@
 						Source="HolidayRecipe.png"/>
 				</StackLayout>
 				<Entry
-					x:Name="linkEntry"
-					Margin="0 0 0 15"
+					x:Name="LinkEntry"
+					Margin="0, 0, 0, 15"
 					FontSize="18"
 					IsReadOnly="True"
 					IsVisible="False"/>
 				<Label
-					x:Name="nameRecipeLabel"
+					x:Name="NameRecipeLabel"
 					FontAttributes="Bold"
 					FontSize="Title"
 					HorizontalOptions="Center"
@@ -92,28 +92,28 @@
 					TextColor="#8B0000"
 					TextTransform="Uppercase"/>
 				<Image
-					x:Name="recipeImage"
+					x:Name="RecipeImage"
 					HeightRequest="300"
 					IsVisible="False"
 					Source="icon"/>
-				<StackLayout x:Name="ingredients"/>
+				<StackLayout x:Name="Ingredients"/>
 				<StackLayout
-					x:Name="linkStackLayout"
+					x:Name="LinkStackLayout"
 					IsVisible="False"
 					Orientation="Horizontal">
 					<CheckBox
-						x:Name="linkCheckBox"
-						Margin="0 20 0 10"
+						x:Name="LinkCheckBox"
+						Margin="0, 20, 0, 10"
 						Color="DarkRed"/>
 					<Label
-						Margin="0 20 0 10"
+						Margin="0, 20, 0, 10"
 						FontAttributes="Bold"
 						FontSize="18"
 						Text="Save link"
 						VerticalTextAlignment="Center"/>
 				</StackLayout>
 				<Button
-					x:Name="recordingButton"
+					x:Name="RecordingButton"
 					BackgroundColor="#8B0000"
 					Clicked="RecordingButton_Click"
 					FontAttributes="Bold"

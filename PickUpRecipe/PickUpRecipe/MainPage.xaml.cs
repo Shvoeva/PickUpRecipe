@@ -55,7 +55,7 @@ namespace PickUpRecipe
 		private async void Parser_OnNewData(object arg1, string[] arg2)
 		{
 			var rec = new Random(DateTime.Now.Second).Next(0, arg2.Length - 1);
-			linkEntry.Text = arg2[rec];
+			LinkEntry.Text = arg2[rec];
 			_recipeParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
 			await _recipeParser.Start();
 			_ingredientsParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
@@ -64,13 +64,13 @@ namespace PickUpRecipe
 
 		private void RecipeParser_OnNewData(object arg1, string[] arg2)
 		{
-			nameRecipeLabel.Text = arg2[0];
-			recipeImage.Source = arg2[1];
+			NameRecipeLabel.Text = arg2[0];
+			RecipeImage.Source = arg2[1];
 		}
 
 		private void IngredientsParser_OnNewData(object arg1, string[] arg2)
 		{
-			ingredients.Children.Clear();
+			Ingredients.Children.Clear();
 			foreach (var ingredient in arg2)
 			{
 				var flexLayout = new FlexLayout();
@@ -87,7 +87,7 @@ namespace PickUpRecipe
 
 				flexLayout.Children.Add(boxes);
 				flexLayout.Children.Add(labels);
-				ingredients.Children.Add(flexLayout);
+				Ingredients.Children.Add(flexLayout);
 			}
 		}
 
@@ -153,14 +153,14 @@ namespace PickUpRecipe
 
 		private async void RecordingButton_Click(object sender, EventArgs e)
 		{
-			var text = nameRecipeLabel.Text + "\n";
+			var text = NameRecipeLabel.Text + "\n";
 
-			if (linkCheckBox.IsChecked)
+			if (LinkCheckBox.IsChecked)
 			{
-				text += linkEntry.Text + "\n";
+				text += LinkEntry.Text + "\n";
 			}
 
-			text = (from ingredientsChild in ingredients.Children
+			text = (from ingredientsChild in Ingredients.Children
 				select ingredientsChild as FlexLayout
 				into flexLayout
 				let checkBox = flexLayout.Children.Select(item => item as CheckBox).First()
@@ -179,11 +179,11 @@ namespace PickUpRecipe
 		/// </summary>
 		private void Show()
 		{
-			linkEntry.IsVisible = true;
-			nameRecipeLabel.IsVisible = true;
-			recipeImage.IsVisible = true;
-			linkStackLayout.IsVisible = true;
-			recordingButton.IsVisible = true;
+			LinkEntry.IsVisible = true;
+			NameRecipeLabel.IsVisible = true;
+			RecipeImage.IsVisible = true;
+			LinkStackLayout.IsVisible = true;
+			RecordingButton.IsVisible = true;
 		}
 	}
 }
