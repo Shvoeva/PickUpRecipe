@@ -1,6 +1,6 @@
 ﻿using AngleSharp.Html.Dom;
 
-namespace PickUpRecipe.Core
+namespace PickUpRecipe.Core.Parsers
 {
 	/// <summary>
 	/// Интерфейс работы с парсом.

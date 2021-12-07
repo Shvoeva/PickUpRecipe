@@ -1,4 +1,4 @@
-﻿namespace PickUpRecipe.Core
+﻿namespace PickUpRecipe.Core.ParserSettings
 {
 	/// <summary>
 	/// Настройки парсера.

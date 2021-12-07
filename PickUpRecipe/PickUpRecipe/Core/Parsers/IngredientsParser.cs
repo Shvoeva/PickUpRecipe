@@ -1,11 +1,8 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using AngleSharp.Html.Dom;
 
-namespace PickUpRecipe.Core.SiteWithDish 
+namespace PickUpRecipe.Core.Parsers 
 {
 	/// <summary>
 	/// Парсер ингредиентов.

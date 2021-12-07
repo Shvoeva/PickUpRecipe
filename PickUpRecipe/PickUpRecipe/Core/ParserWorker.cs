@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using PickUpRecipe.Core.Parsers;
+using PickUpRecipe.Core.ParserSettings;
+
 //value
 
 namespace PickUpRecipe.Core

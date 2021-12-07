@@ -1,19 +1,19 @@
-﻿namespace PickUpRecipe.Core.RecipeSite
+﻿namespace PickUpRecipe.Core.ParserSettings
 {
 	/// <summary>
-	/// Настройки для сайта.
+	/// Базовый класс для настроек парса.
 	/// </summary>
-	public class RecipeSiteSettings : IParserSettings
+	public abstract class ParserSettingsBase : IParserSettings
 	{
 		/// <summary>
 		/// Конструктор.
 		/// </summary>
 		/// <param name="address">Адрес сайта.</param>
-		public RecipeSiteSettings(string address)
+		protected ParserSettingsBase(string address)
 		{
 			BaseUrl = address;
 		}
-		
+
 		/// <inheritdoc/>
 		public string BaseUrl { get; set; }
 	}
