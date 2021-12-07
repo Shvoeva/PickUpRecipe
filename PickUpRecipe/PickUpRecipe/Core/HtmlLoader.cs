@@ -6,46 +6,69 @@ using System.Threading.Tasks;
 
 namespace PickUpRecipe.Core
 {
-    class HtmlLoader
-    {
-        readonly HttpClient client;
-        readonly string url;
+	/// <summary>
+	/// HTML загрузчик.
+	/// </summary>
+	public class HtmlLoader
+	{
+		/// <summary>
+		/// Длина строки.
+		/// </summary>
+		private const int StringLength = 4096;
 
-        public HtmlLoader(IParserSettings settings)
-        {
-            client = new HttpClient();
-            url = settings.BaseUrl;
-        }
+		/// <summary>
+		/// HTTP клиент.
+		/// </summary>
+		private readonly HttpClient _client;
 
-        public async Task<string> GetSourceByPageId()
-        {
-            var response = await client.GetAsync(url);
+		/// <summary>
+		/// Ссылка на сайт.
+		/// </summary>
+		private readonly string _url;
 
-            if (response != null && response.StatusCode == HttpStatusCode.OK)
-            {
-                int responseLength = (int)response.Content.Headers.ContentLength;
-                var sb = new StringBuilder(capacity: responseLength);
-                using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                using (var rdr = new StreamReader(responseStream))
-                {
-                    char[] charBuffer = new char[4096];
+		/// <summary>
+		/// Конструктор.
+		/// </summary>
+		/// <param name="settings">Настройки парсера.</param>
+		public HtmlLoader(IParserSettings settings)
+		{
+			_client = new HttpClient();
+			_url = settings.BaseUrl;
+		}
 
-                    while (true)
-                    {
-                        var read = await rdr.ReadAsync(charBuffer, 0, charBuffer.Length).ConfigureAwait(false);
-                        sb.Append(charBuffer, 0, read);
+		/// <summary>
+		/// Получить код страницы.
+		/// </summary>
+		/// <returns>Код страницы типа <see cref="string"/>.</returns>
+		public async Task<string> GetSourceByPageId()
+		{
+			var response = await _client.GetAsync(_url);
 
-                        if (read == 0)
-                        {
-                            break;
-                        }
-                    }
-                }
+			if (response == null || response.StatusCode != HttpStatusCode.OK) return null;
+			var responseLength = (int)response.Content.Headers.ContentLength;
+			var sb = new StringBuilder(capacity: responseLength);
+			using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+			{
+				using (var rdr = new StreamReader(responseStream))
+				{
+					var charBuffer = new char[StringLength];
 
-                return sb.ToString();
-            }
+					while (true)
+					{
+						var read = await rdr.ReadAsync(charBuffer, 0, charBuffer.Length).ConfigureAwait(false);
+						sb.Append(charBuffer, 0, read);
 
-            return null;
-        }
-    }
+						if (read == 0)
+						{
+							break;
+						}
+					}
+				}
+
+			}
+
+			return sb.ToString();
+
+		}
+	}
 }

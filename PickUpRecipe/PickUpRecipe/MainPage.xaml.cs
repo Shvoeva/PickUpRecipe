@@ -42,10 +42,10 @@ namespace PickUpRecipe
 
             linkEntry.Text = arg2[rec];
 
-            recipeParser.Settings = new SiteWithDishSetting(arg2[rec]);
+            recipeParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
             recipeParser.Start();
 
-            ingredientsParser.Settings = new SiteWithDishSetting(arg2[rec]);
+            ingredientsParser.ParserSettings = new SiteWithDishSetting(arg2[rec]);
             ingredientsParser.Start();
         }
 
@@ -89,7 +89,7 @@ namespace PickUpRecipe
         {
             page = new Random(DateTime.Now.Second).Next(1, 15);
             string str = $"https://www.carolinescooking.com/main/page/{page}/";
-            parser.Settings = new RecipeSiteSettings(str);
+            parser.ParserSettings = new RecipeSiteSettings(str);
             parser.Start();
 
             Show();
@@ -99,7 +99,7 @@ namespace PickUpRecipe
         {
             page = new Random(DateTime.Now.Second).Next(1, 7);
             string str = $"https://www.carolinescooking.com/side/page/{page}/";
-            parser.Settings = new RecipeSiteSettings(str);
+            parser.ParserSettings = new RecipeSiteSettings(str);
             parser.Start();
 
             Show();
@@ -109,7 +109,7 @@ namespace PickUpRecipe
         {
             page = new Random(DateTime.Now.Second).Next(1, 5);
             string str = $"https://www.carolinescooking.com/dessert/page/{page}/";
-            parser.Settings = new RecipeSiteSettings(str);
+            parser.ParserSettings = new RecipeSiteSettings(str);
             parser.Start();
 
             Show();
@@ -119,7 +119,7 @@ namespace PickUpRecipe
         { 
             page = new Random(DateTime.Now.Second).Next(1, 9);
             string str = $"https://www.carolinescooking.com/snack/page/{page}/";
-            parser.Settings = new RecipeSiteSettings(str);
+            parser.ParserSettings = new RecipeSiteSettings(str);
             parser.Start();
 
             Show();
@@ -129,7 +129,7 @@ namespace PickUpRecipe
         {
             page = new Random(DateTime.Now.Second).Next(1, 4);
             string str = $"https://www.carolinescooking.com/drink/page/{page}/";
-            parser.Settings = new RecipeSiteSettings(str);
+            parser.ParserSettings = new RecipeSiteSettings(str);
             parser.Start();
 
             Show();
@@ -139,7 +139,7 @@ namespace PickUpRecipe
         {
             page = new Random(DateTime.Now.Second).Next(1, 6);
             string str = $"https://www.carolinescooking.com/seasonal-recipes/holiday-ideas/page/{page}/";
-            parser.Settings = new RecipeSiteSettings(str);
+            parser.ParserSettings = new RecipeSiteSettings(str);
             parser.Start();
 
             Show();

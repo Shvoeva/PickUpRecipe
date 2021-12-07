@@ -5,89 +5,125 @@ using AngleSharp.Html.Parser;
 
 namespace PickUpRecipe.Core
 {
-    class ParserWorker<T> where T : class
-    {
-        IParser<T> parser;
-        IParserSettings parserSettings;
+	/// <summary>
+	/// Класс для работы с парсом.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class ParserWorker<T> where T : class
+	{
+		/// <summary>
+		/// Парсер.
+		/// </summary>
+		IParser<T> _parser;
 
-        HtmlLoader loader;
+		/// <summary>
+		/// Настройки парсера.
+		/// </summary>
+		IParserSettings _parserSettings;
 
-        bool isActive;
+		/// <summary>
+		/// HTML loader.
+		/// </summary>
+		HtmlLoader _loader;
 
-        public event Action<object, T> OnNewData;
-        public event Action<object> OnCompleted;
+		/// <summary>
+		/// Флаг, отвечающий за работу парсера.
+		/// </summary>
+		bool _isActive;
 
-        public IParser<T> Parser
-        {
-            get
-            {
-                return parser;
-            }
-            set
-            {
-                parser = value;
-            }
-        }
+		/// <summary>
+		/// Событие появление новых данных.
+		/// </summary>
+		public event Action<object, T> OnNewData;
 
-        public IParserSettings Settings
-        {
-            get
-            {
-                return parserSettings;
-            }
-            set
-            {
-                parserSettings = value;
-                loader = new HtmlLoader(value);
-            }
-        }
+		/// <summary>
+		/// Событие окончания парса.
+		/// </summary>
+		public event Action<object> OnCompleted;
 
-        public bool IsActive
-        {
-            get
-            {
-                return isActive;
-            }
-        }
+		/// <summary>
+		/// Возвращает и задает парсер.
+		/// </summary>
+		public IParser<T> Parser
+		{
+			get => _parser;
+			set => _parser = value;
+		}
 
-        public ParserWorker(IParser<T> parser)
-        {
-            this.parser = parser;
-        }
+		/// <summary>
+		/// Возвращает и задает настройки парсера.
+		/// </summary>
+		public IParserSettings ParserSettings
+		{
+			get => _parserSettings;
+			set
+			{
+				_parserSettings = value;
+				_loader = new HtmlLoader(value);
+			}
+		}
 
-        public ParserWorker(IParser<T> parser, IParserSettings parserSettings) : this(parser)
-        {
-            this.parserSettings = parserSettings;
-        }
+		/// <summary>
+		/// Возвращает значение флага.
+		/// </summary>
+		public bool IsActive => _isActive;
 
-        public async Task Start()
-        {
-            isActive = true;
-            await Worker();
-        }
+		/// <summary>
+		/// Конструктор.
+		/// </summary>
+		/// <param name="parser">Парсер.</param>
+		public ParserWorker(IParser<T> parser)
+		{
+			Parser = parser;
+		}
 
-        public void Abort()
-        {
-            isActive = false;
-        }
+		/// <summary>
+		/// Конструктор.
+		/// </summary>
+		/// <param name="parser">Парсер.</param>
+		/// <param name="parserSettings">Настройки парсера.</param>
+		public ParserWorker(IParser<T> parser, IParserSettings parserSettings) : this(parser)
+		{
+			ParserSettings = parserSettings;
+		}
 
-        private async Task Worker()
-        {
-            if (!isActive)
-            {
-                OnCompleted?.Invoke(this);
-                return;
-            }
+		/// <summary>
+		/// Начало парса.
+		/// </summary>
+		/// <returns></returns>
+		public async Task Start()
+		{
+			_isActive = true;
+			await Parse();
+		}
 
-            var source = await loader.GetSourceByPageId();
-            var domParser = new HtmlParser();
-            var document = domParser.ParseDocument(source);
-            var result = parser.Parse(document);
+		/// <summary>
+		/// Остановка парса.
+		/// </summary>
+		public void Abort()
+		{
+			_isActive = false;
+		}
 
-            OnNewData?.Invoke(this, result);
+		/// <summary>
+		/// Парс.
+		/// </summary>
+		/// <returns></returns>
+		private async Task Parse()
+		{
+			if (!_isActive)
+			{
+				OnCompleted?.Invoke(this);
+				return;
+			}
 
-            OnCompleted?.Invoke(this);
-            Abort();
-        }
-    }
+			var source = await _loader.GetSourceByPageId();
+			var domParser = new HtmlParser();
+			var document = domParser.ParseDocument(source);
+			var result = _parser.Parse(document);
+			OnNewData?.Invoke(this, result);
+			OnCompleted?.Invoke(this);
+			Abort();
+		}
+	}
 }
