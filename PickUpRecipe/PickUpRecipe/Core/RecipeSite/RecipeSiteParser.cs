@@ -7,7 +7,7 @@ namespace PickUpRecipe.Core.RecipeSite
     /// <summary>
     /// Парсер сайта.
     /// </summary>
-    class RecipeSiteParser : IParser<string[]>
+    public class RecipeSiteParser : IParser<string[]>
     {
         /// <inheritdoc/>
         public string[] Parse(IHtmlDocument document)

@@ -3,7 +3,7 @@
     /// <summary>
     /// Настройки для сайта.
     /// </summary>
-    class RecipeSiteSettings : IParserSettings
+    public class RecipeSiteSettings : IParserSettings
     {
         /// <summary>
         /// Конструктор.

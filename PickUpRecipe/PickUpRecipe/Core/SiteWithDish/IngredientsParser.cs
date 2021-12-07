@@ -7,38 +7,37 @@ using System.Text.RegularExpressions;
 
 namespace PickUpRecipe.Core.SiteWithDish 
 {
-    class IngredientsParser : IParser<string[]>
+    /// <summary>
+    /// Парсер ингредиентов.
+    /// </summary>
+    public class IngredientsParser : IParser<string[]>
     {
-        public string[] Parse(IHtmlDocument document)
+		/// <summary>
+		/// Название класса для элемента ul.
+		/// </summary>
+	    private const string ClassUl = "wprm-recipe-ingredients";
+
+		/// <inheritdoc/>
+		public string[] Parse(IHtmlDocument document)
         {
-            var listAmounts = new List<string>();
-            var listUnits = new List<string>();
-            var listNames = new List<string>();
             var listResult = new List<string>();
-
-            if (document != null)
+            if (document == null)
             {
-                var uls = document.GetElementsByTagName("ul");
-                foreach (HtmlElement ul in uls)
-                {
-                    if (ul.GetAttribute("class") == "wprm-recipe-ingredients")
-                    {
-                        var lis = ul.GetElementsByTagName("li");
-                        foreach (HtmlElement li in lis)
-                        {
-                            var spans = li.GetElementsByTagName("span");
-                            var spanString = string.Empty;
-                            foreach (HtmlElement span in spans)
-                            {
-                                spanString += span.TextContent + " ";
-                            }
-
-                            listResult.Add(spanString);
-                        }
-                    }
-                }
+	            return listResult.ToArray();
             }
-            
+
+            var uls = document.GetElementsByTagName("ul");
+            listResult.AddRange(from HtmlElement ul in uls
+	            where ul.GetAttribute("class") == ClassUl
+	            from liElement in ul.GetElementsByTagName("li")
+	            select (HtmlElement)liElement
+	            into li
+	            select li.GetElementsByTagName("span")
+	            into spans
+	            select spans.Cast<HtmlElement>()
+		            .Aggregate(string.Empty, (current, span) =>
+			            current + span.TextContent + " "));
+
             return listResult.ToArray();
         }
     }
