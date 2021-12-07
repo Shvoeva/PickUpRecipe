@@ -1,39 +1,127 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PickUpRecipe.MainPage">
+<ContentPage
+	x:Class="PickUpRecipe.MainPage"
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <ScrollView>
-        <StackLayout>
-            <StackLayout Orientation="Horizontal" >
-                <Frame BackgroundColor="#FF8B0000" Padding="15" WidthRequest="80">
-                    <Image Source="Start.png" />
-                </Frame>
-                <Frame BackgroundColor="#FF8B0000" Padding="15" HeightRequest="100" WidthRequest="1000">
-                    <Label Text="PICK UP A RECIPE" HorizontalTextAlignment="Start" TextColor="White" FontSize="40" TextTransform="Uppercase" FontAttributes="Bold"/>
-                </Frame>
-            </StackLayout>
-            <StackLayout Margin="25,25,25,25">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                    <ImageButton x:Name ="mainDishButton" BackgroundColor="#8B0000" Source="MainDish.png" Clicked="MainDishButton_Click" HeightRequest="115" Padding="15" />
-                    <ImageButton x:Name ="sideDishButton" Clicked="SideDishButton_Click" BackgroundColor="#8B0000" Source="SideDish.png" HeightRequest="115" Padding="10" />
-                    <ImageButton x:Name ="dessertButton" Clicked="DessertButton_Click" BackgroundColor="#8B0000" Source="Dessert.png" HeightRequest="115" Padding="15" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Margin="0,0,0,25" HorizontalOptions="Center">
-                    <ImageButton x:Name ="snackButton" Clicked="SnackButton_Click" BackgroundColor="#8B0000" Source="Snack.png" HeightRequest="115" Padding="10" />
-                    <ImageButton x:Name ="drinkButton" Clicked="DrinkButton_Click" BackgroundColor="#8B0000" Source="Drink.png" HeightRequest="115" Padding="15" />
-                    <ImageButton x:Name ="holidayRecipeButton" Clicked="HolidayRecipeButton_Click" BackgroundColor="#8B0000" Source="HolidayRecipe.png" HeightRequest="115" Padding="10" />
-                </StackLayout>
-                <Entry x:Name ="linkEntry" IsReadOnly="True"  FontSize="18" Margin="0,0,0,15" IsVisible="False"/>
-                <Label x:Name ="nameRecipeLabel" HorizontalOptions="Center" TextTransform="Uppercase" TextColor="#8B0000" FontAttributes="Bold" FontSize="Title" IsVisible="False"/>
-                <Image x:Name ="recipeImage" Source="icon" HeightRequest="300" IsVisible="False"/>
-                <StackLayout x:Name="ingredients" />
-                <StackLayout x:Name="linkStackLayout" Orientation="Horizontal" IsVisible="False">
-                    <CheckBox x:Name="linkCheckBox" Color="DarkRed" Margin="0,20,0,10"/>
-                    <Label FontSize="18" VerticalTextAlignment="Center" Text="Save link" FontAttributes="Bold" Margin="0,20,0,10" />
-                </StackLayout>
-                <Button x:Name="recordingButton" Clicked="RecordingButton_Click" BackgroundColor="#8B0000" Text="Add to clipboard" TextColor="White" FontAttributes="Bold" FontSize="25" IsVisible="False" />
-            </StackLayout>
-        </StackLayout>
-    </ScrollView>
+	<ScrollView>
+		<StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Frame
+					Padding="15"
+					BackgroundColor="#FF8B0000"
+					WidthRequest="80">
+					<Image Source="Start.png"/>
+				</Frame>
+				<Frame
+					Padding="15"
+					BackgroundColor="#FF8B0000"
+					HeightRequest="100"
+					WidthRequest="1000">
+					<Label
+						FontAttributes="Bold"
+						FontSize="40"
+						HorizontalTextAlignment="Start"
+						Text="PICK UP A RECIPE"
+						TextColor="White"
+						TextTransform="Uppercase"/>
+				</Frame>
+			</StackLayout>
+			<StackLayout Margin="25 25 25 25">
+				<StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+					<ImageButton
+						x:Name="mainDishButton"
+						Padding="15"
+						BackgroundColor="#8B0000"
+						Clicked="MainDishButton_Click"
+						HeightRequest="115"
+						Source="MainDish.png"/>
+					<ImageButton
+						x:Name="sideDishButton"
+						Padding="10"
+						BackgroundColor="#8B0000"
+						Clicked="SideDishButton_Click"
+						HeightRequest="115"
+						Source="SideDish.png"/>
+					<ImageButton
+						x:Name="dessertButton"
+						Padding="15"
+						BackgroundColor="#8B0000"
+						Clicked="DessertButton_Click"
+						HeightRequest="115"
+						Source="Dessert.png"/>
+				</StackLayout>
+				<StackLayout
+					Margin="0 0 0 25"
+					HorizontalOptions="Center"
+					Orientation="Horizontal">
+					<ImageButton
+						x:Name="snackButton"
+						Padding="10"
+						BackgroundColor="#8B0000"
+						Clicked="SnackButton_Click"
+						HeightRequest="115"
+						Source="Snack.png"/>
+					<ImageButton
+						x:Name="drinkButton"
+						Padding="15"
+						BackgroundColor="#8B0000"
+						Clicked="DrinkButton_Click"
+						HeightRequest="115"
+						Source="Drink.png"/>
+					<ImageButton
+						x:Name="holidayRecipeButton"
+						Padding="10"
+						BackgroundColor="#8B0000"
+						Clicked="HolidayRecipeButton_Click"
+						HeightRequest="115"
+						Source="HolidayRecipe.png"/>
+				</StackLayout>
+				<Entry
+					x:Name="linkEntry"
+					Margin="0 0 0 15"
+					FontSize="18"
+					IsReadOnly="True"
+					IsVisible="False"/>
+				<Label
+					x:Name="nameRecipeLabel"
+					FontAttributes="Bold"
+					FontSize="Title"
+					HorizontalOptions="Center"
+					IsVisible="False"
+					TextColor="#8B0000"
+					TextTransform="Uppercase"/>
+				<Image
+					x:Name="recipeImage"
+					HeightRequest="300"
+					IsVisible="False"
+					Source="icon"/>
+				<StackLayout x:Name="ingredients"/>
+				<StackLayout
+					x:Name="linkStackLayout"
+					IsVisible="False"
+					Orientation="Horizontal">
+					<CheckBox
+						x:Name="linkCheckBox"
+						Margin="0 20 0 10"
+						Color="DarkRed"/>
+					<Label
+						Margin="0 20 0 10"
+						FontAttributes="Bold"
+						FontSize="18"
+						Text="Save link"
+						VerticalTextAlignment="Center"/>
+				</StackLayout>
+				<Button
+					x:Name="recordingButton"
+					BackgroundColor="#8B0000"
+					Clicked="RecordingButton_Click"
+					FontAttributes="Bold"
+					FontSize="25"
+					IsVisible="False"
+					Text="Add to clipboard"
+					TextColor="White"/>
+			</StackLayout>
+		</StackLayout>
+	</ScrollView>
 </ContentPage>
