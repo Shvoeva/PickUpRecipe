@@ -72,8 +72,21 @@ namespace PickUpRecipe
 		{
 			Ingredients.Children.Clear();
 			foreach (var ingredient in arg2)
-			{
-				var flexLayout = new FlexLayout();
+            {
+                var grid = new Grid
+                {
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    RowDefinitions =
+                    {
+                        new RowDefinition { Height = GridLength.Auto }
+                    },
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition { Width = new GridLength(25, GridUnitType.Absolute) },
+                        new ColumnDefinition { Width = GridLength.Auto }
+					}
+				};
+
 				var boxes = new CheckBox
 				{
 					Color = Color.DarkRed
@@ -82,12 +95,12 @@ namespace PickUpRecipe
 				{
 					FontSize = 18,
 					VerticalTextAlignment = TextAlignment.Center,
-					Text = ingredient
-				};
+					Text = ingredient,
+                };
 
-				flexLayout.Children.Add(boxes);
-				flexLayout.Children.Add(labels);
-				Ingredients.Children.Add(flexLayout);
+				grid.Children.Add(boxes,0,0);
+                grid.Children.Add(labels,1,0);
+				Ingredients.Children.Add(grid);
 			}
 		}
 
@@ -161,10 +174,10 @@ namespace PickUpRecipe
 			}
 
 			text = (from ingredientsChild in Ingredients.Children
-				select ingredientsChild as FlexLayout
-				into flexLayout
-				let checkBox = flexLayout.Children.Select(item => item as CheckBox).First()
-				let label = flexLayout.Children.Select(item => item as Label).First()
+				select ingredientsChild as Grid
+				into grid
+				let checkBox = grid.Children.Select(item => item as CheckBox).First()
+				let label = grid.Children.Select(item => item as Label).First()
 				where checkBox.IsChecked
 				select label).Aggregate(text, (current, label) => current + ("\n" + label.Text));
 
