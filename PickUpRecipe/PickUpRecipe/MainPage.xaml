@@ -97,6 +97,22 @@
 						HeightRequest="300"
 						IsVisible="False"
 						Source="icon"/>
+					<StackLayout
+						x:Name="SelectAllStackLayout"
+						IsVisible="False"
+						Orientation="Horizontal">
+						<CheckBox
+							x:Name="SelectAll"
+							CheckedChanged="SelectAll_OnCheckedChanged"
+							Margin="0, 20, 0, 10"
+							Color="DarkRed"/>
+						<Label
+							Margin="0, 20, 0, 10"
+							FontAttributes="Bold"
+							FontSize="18"
+							Text="Select All"
+							VerticalTextAlignment="Center"/>
+					</StackLayout>
 					<StackLayout x:Name="Ingredients"/>
 					<StackLayout
 						x:Name="LinkStackLayout"
@@ -104,6 +120,7 @@
 						Orientation="Horizontal">
 						<CheckBox
 							x:Name="LinkCheckBox"
+							IsChecked="True"
 							Margin="0, 20, 0, 10"
 							Color="DarkRed"/>
 						<Label
