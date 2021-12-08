@@ -173,13 +173,16 @@ namespace PickUpRecipe
 				text += LinkEntry.Text + "\n";
 			}
 
-			text = (from ingredientsChild in Ingredients.Children
-				select ingredientsChild as Grid
-				into grid
-				let checkBox = grid.Children.Select(item => item as CheckBox).First()
-				let label = grid.Children.Select(item => item as Label).First()
-				where checkBox.IsChecked
-				select label).Aggregate(text, (current, label) => current + ("\n" + label.Text));
+			foreach (var child in Ingredients.Children)
+			{
+				var grid = child as Grid;
+				var checkBox = grid.Children[0] as CheckBox;
+				var label = grid.Children[1] as Label;
+				if (checkBox.IsChecked)
+				{
+					text += label.Text + "\n";
+				}
+			}
 
 			await Clipboard.SetTextAsync(text);
 			var text2 = Clipboard.GetTextAsync().ToString();
@@ -192,11 +195,23 @@ namespace PickUpRecipe
 		/// </summary>
 		private void Show()
 		{
+			SelectAllStackLayout.IsVisible = true;
 			LinkEntry.IsVisible = true;
 			NameRecipeLabel.IsVisible = true;
 			RecipeImage.IsVisible = true;
 			LinkStackLayout.IsVisible = true;
 			RecordingButton.IsVisible = true;
+			SelectAll.IsChecked = false;
+		}
+
+		private void SelectAll_OnCheckedChanged(object sender, CheckedChangedEventArgs e)
+		{
+			foreach (var child in Ingredients.Children)
+			{
+				var grid = child as Grid;
+				var checkBox = grid.Children[0] as CheckBox;
+				checkBox.IsChecked = SelectAll.IsChecked;
+			}
 		}
 	}
 }
