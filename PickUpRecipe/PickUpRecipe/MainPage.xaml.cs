@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Threading;
 using PickUpRecipe.Core;
 using Xamarin.Forms;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using PickUpRecipe.Core.Parsers;
 using PickUpRecipe.Core.ParserSettings;
 using Xamarin.Essentials;
